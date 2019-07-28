@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
   private bool isGrounded = false;
   private Rigidbody2D rb;
   private List<GameObject> currentCollisions = new List<GameObject>();
+  private int boost = 100;
 
   public void Awake() {
     rb = GetComponent<Rigidbody2D>();
@@ -25,6 +26,8 @@ public class PlayerController : MonoBehaviour {
 
     fart.spriteRender.flipX = dir;
     GetComponent<SpriteRenderer>().flipX = !dir;
+
+    Debug.Log(1.0f / Time.deltaTime);
   }
 
   private void OnCollisionEnter2D(Collision2D col) {
@@ -59,10 +62,31 @@ public class PlayerController : MonoBehaviour {
       rb.AddForce(new Vector2(0, 8), ForceMode2D.Impulse);
       isGrounded = false;
     }
-    if (Input.GetKey("space")) {
+    if (isGrounded) {
+      boost += 5;
+    }
+    if (boost > 100) {
+      boost = 100;
+    }
+    if (Input.GetKey("space") && boost > 0) {
       rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+      boost -= 1;
+      showFart();
     } else {
       rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+      hideFart();
     }
+  }
+
+  private void showFart() {
+    fart.show();
+  }
+
+  private void hideFart() {
+    fart.hide();
+  }
+
+  public int getBoost() {
+    return boost;
   }
 }

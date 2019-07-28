@@ -62,4 +62,12 @@ public class FartController : MonoBehaviour {
     tex.filterMode = FilterMode.Point;
     return tex;
   }
+
+  public void show() {
+    spriteRender.enabled = true;
+  }
+
+  public void hide() {
+    spriteRender.enabled = false;
+  }
 }
